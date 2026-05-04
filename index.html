@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Retro</title>
+    <style>
+        :root {
+            --bg-color: #2c3e50;
+            --calc-body: #d6d1c4; /* Bege clássico */
+            --calc-shadow: #b0ab99;
+            --display-bg: #8ba88d; /* Verde LCD */
+            --btn-gray: #e0e0e0;
+            --btn-orange: #f39c12;
+            --text-dark: #333;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Container da Calculadora */
+        .calculator {
+            background-color: var(--calc-body);
+            width: 90%;
+            max-width: 350px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 10px 10px 0px var(--calc-shadow), 20px 20px 50px rgba(0,0,0,0.5);
+            border: 4px solid #fff;
+        }
+
+        /* Visor LCD */
+        .display {
+            background-color: var(--display-bg);
+            color: #1a231a;
+            width: 100%;
+            height: 70px;
+            margin-bottom: 25px;
+            text-align: right;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 2.5rem;
+            border: 4px inset rgba(0,0,0,0.2);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Grade de Botões */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            height: 60px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--btn-gray);
+            color: var(--text-dark);
+            cursor: pointer;
+            box-shadow: 0 4px #999;
+            transition: all 0.1s;
+        }
+
+        button:active {
+            box-shadow: 0 0px #666;
+            transform: translateY(4px);
+        }
+
+        .operator {
+            background-color: #bbb;
+        }
+
+        .equal {
+            background-color: var(--btn-orange);
+            grid-column: span 2;
+        }
+
+        .clear {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        /* Responsividade para telas muito pequenas */
+        @media (max-height: 600px) {
+            .calculator { padding: 15px; }
+            button { height: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+        <button class="clear" onclick="clearDisplay()">AC</button>
+        <button class="operator" onclick="appendToDisplay('/')">/</button>
+        <button class="operator" onclick="appendToDisplay('*')">×</button>
+        <button class="operator" onclick="backspace()">C</button>
+        
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button class="operator" onclick="appendToDisplay('-')">-</button>
+        
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button class="operator" onclick="appendToDisplay('+')">+</button>
+        
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        
+        <button onclick="appendToDisplay('0')">0</button>
+        <button class="equal" onclick="calculate()">=</button>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById('display');
+
+    function appendToDisplay(input) {
+        if (display.innerText === '0' && input !== '.') {
+            display.innerText = input;
+        } else {
+            display.innerText += input;
+        }
+    }
+
+    function clearDisplay() {
+        display.innerText = '0';
+    }
+
+    function backspace() {
+        if (display.innerText.length > 1) {
+            display.innerText = display.innerText.slice(0, -1);
+        } else {
+            display.innerText = '0';
+        }
+    }
+
+    function calculate() {
+        try {
+            // Eval é usado aqui para simplicidade, em apps reais recomenda-se um parser de math
+            display.innerText = eval(display.innerText);
+        } catch (error) {
+            display.innerText = "Erro";
+            setTimeout(clearDisplay, 1500);
+        }
+    }
+</script>
+
+</body>
+</html>
